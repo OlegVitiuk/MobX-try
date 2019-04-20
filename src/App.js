@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import { inject, observer } from 'mobx-react';
 import './App.css';
 
+@inject('BirdStore')
+@observer
 class App extends Component {
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.BirdStore.addBird(this.bird.value);
+  };
+
   render() {
+    const { BirdStore } = this.props;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <div className="App">
+            <h2>U have {BirdStore.birdCount} birds</h2>
+            <form onSubmit={ this.handleSubmit }>
+                <input
+            type="text"
+            placeholder="Enter bird"
+            ref={ input => (this.bird = input) }
+          />
+                <button>Add bird</button>
+            </form>
+        </div>
     );
   }
 }
